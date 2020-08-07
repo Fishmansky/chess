@@ -1,245 +1,12 @@
 <?php
-//Klasa pola: zawiera informacje o umiejscowieniu (kolumnie i rzędzie), swoim kolorze oraz numerycznej wartości dotyczącej zajmującej ją figury (0 oznacza że pole nie jest obecnie zajęte). Posiada funkcję wyświetlającą klocek która sprawdza czy klocek jest zajęty oraz jaki kolor ma przyjąć. Inną funkcją jest funkcja zwracająca informacje o figurze która zajmuje pole.
-class Square {
-	public $X;
-	public $Y;
-	public $bcg;
-	public $takenBy;
-
-	public function __construct($file, $rank, $i){
-		$this->X = $file;
-		$this->Y = $rank;
-		$this->bcg = $i;
-	}
-	
-	public function holdingPiece(){
-		switch ($this->takenBy){
-		case 0:
-			return "None";
-				break;
-		case 1:
-			return "Pawn";
-				break;
-		case 2:
-			return "Knight";
-				break;
-		case 3:
-			return "Bishop";
-				break;
-		case 4:
-			return "Rook";
-				break;
-		case 5:
-			return "Queen";
-				break;
-		case 6:
-			return "King";
-				break;		
-		}
-	}
-
-	public function printsq(){
-		switch ($this->takenBy){
-		case 0:
-			if($this->bcg == 1){
-                		echo "<img src=assets/w.png />";
-                	} else {
-                		echo "<img src=assets/b.png />";
-                	}
-			break;
-		case 1:
-			if($this->bcg == 1){
-				echo "<img src=assets/pinw.png />";
-			} else {
-				echo "<img src=assets/pinb.png />";
-			}
-			break;
-		case 2:
-			if($this->bcg ==1){
-				echo "<img src=assets/knightw.png />";
-			} else {
-				echo "<img src=assets/knightb.png />";
-			}
-			break;
-		case 3:
-			if($this->bcg == 1){
-				echo "<img src=assets/bishopw.png />";
-			} else {
-				echo "<img src=assets/bishopb.png />";
-			}
-			break;
-		case 4:
-			if($this->bcg ==1){
-				echo "<img src=assets/rookw.png />";
-			} else {
-				echo "<img src=assets/rookb.png />";
-			}
-			break;
-		case 5:
-			if($this->bcg == 1){
-				echo "<img src=assets/queenw.png />";
-			} else {
-				echo "<img src=assets/queenb.png />";
-			}
-			break;
-		case 6:
-			if($this->bcg == 1){
-				echo "<img src=assets/kingw.png />";	
-			} else {
-				echo "<img src=assets/kingb.png />";
-			}
-			break;
-		}
-	}
-}
-
-//Klasa ogólna figury - zawiera jej 
-class Piece {
-	public $ptype;
-	public $position;
-	public $state;
-
-	public function __construct(){
-	}
-}
-
-class Pawn extends Piece {
-	public $imagew = "<img src=assets/pinw.png />";
-	public $imageb = "<img src=assets/pinb.png />";
-	public function __construct(){
-		$this->ptype = 1;
-		$this->state = 0; //state 0 = figura wolna, nie będąca celem ataku
-	}
-
-	public function getRange(){
-		$range = array($this->pawnmv1, $this->pawnmv2);
-		return $range;
-	}
-	//zakres ruchów
-	public $pawnmv1 = array("X" => 1, "Y" => 0);
-	public $pawnmv2 = array("X" => 2, "Y" => 0);
-}
-
-class Knight extends Piece {
-	public function __construct(){
-		$this->ptype = 2;
-		$this->state = 0;
-	}
-	public function getRange(){
-		$range = array($this->nmv1, $this->nmv2, $this->nmv3, $this->nmv4, $this->nmv5, $this->nmv6, $this->nmv7, $this->nmv8);
-		return $range;
-	}
-
-	public $nmv1 = array("X" => 2, "Y" => 1);
-	public $nmv2 = array("X" => 2, "Y" => -1);
-	public $nmv3 = array("X" => -2, "Y" => 1);
-	public $nmv4 = array("X" => -2, "Y" => -1);
-	public $nmv5 = array("X" => 1, "Y" => 2);
-	public $nmv6 = array("X" => 1, "Y" => -2);
-	public $nmv7 = array("X" => -1, "Y" => 2);
-	public $nmv8 = array("X" => -1, "Y" => -2);	
-}
-
-class Bishop extends Piece {
-	public $imagew = "<img src=assets/bishopw.png />";
-	public $imageb = "<img src=assets/bishopb.png />";
-	public function __construct(){
-		$this->ptype = 3;
-		$this->state = 0;
-	}
-	
-	public function getRange(){
-		$range = array($this->bmv1, $this->bmv2, $this->bmv3, $this->bmv4);
-		return $range;
-	}
-	public $bmv1 = array("X" => 1, "Y" => 1);
-	public $bmv2 = array("X" => 1, "Y" => -1);
-	public $bmv3 = array("X" => -1, "Y" => 1);
-	public $bmv4 = array("X" => -1, "Y" => -1);
-}
-
-class Rook extends Piece {
-	public function __construct(){
-		$this->ptype = 4;
-		$this->state = 0;
-	}
-	public function getRange(){
-		$range = array($this->rmv1, $this->rmv2, $this->rmv3, $this->rmv4);
-		return $range;
-	}
-
-public $rmv1 = array("X" => 1, "Y" => 0);
-public $rmv2 = array("X" => -1, "Y" => 0);
-public $rmv3 = array("X" => 0, "Y" => 1);
-public $rmv4 = array("X" => 0, "Y" => -1);
-}
-
-class Queen extends Piece {
-	public function __construct(){
-		$this->ptype = 5;
-		$this->state = 0;
-	}
-	public function getRange(){
-		$range = array($this->rmv1, $this->rmv2, $this->rmv3, $this->rmv4, $this->bmv1, $this->bmv2, $this->bmv3, $this->bmv4);
-		return $range;
-	}
-	
-	public $bmv1 = array("X" => 1, "Y" => 1);
-	public $bmv2 = array("X" => 1, "Y" => -1);
-	public $bmv3 = array("X" => -1, "Y" => 1);
-	public $bmv4 = array("X" => -1, "Y" => -1);                                    
-	public $rmv1 = array("X" => 1, "Y" => 0);
-	public $rmv2 = array("X" => -1, "Y" => 0);
-	public $rmv3 = array("X" => 0, "Y" => 1);
-	public $rmv4 = array("X" => 0, "Y" => -1);
-
-}
-
-class King extends Piece {
-	public function __construct(){
-		$this->ptype = 6;
-		$this->state = 0;
-	}
-	public function getRange(){
-		$range = array($this->rmv1, $this->rmv2, $this->rmv3, $this->rmv4, $this->bmv1, $this->bmv2, $this->bmv3, $this->bmv4);
-		return $range;
-	}
-
-public $bmv1 = array("X" => 1, "Y" => 1);
-public $bmv2 = array("X" => 1, "Y" => -1);
-public $bmv3 = array("X" => -1, "Y" => 1);
-public $bmv4 = array("X" => -1, "Y" => -1);
-                                            
-public $rmv1 = array("X" => 1, "Y" => 0);
-public $rmv2 = array("X" => -1, "Y" => 0);
-public $rmv3 = array("X" => 0, "Y" => 1);
-public $rmv4 = array("X" => 0, "Y" => -1);
-}
-
-class Moves {
-	public $pawnmv1 = array("X" => 1, "Y" => 0);
-	public $pawnmv2 = array("X" => 2, "Y" => 0);
-
-	public $nmv1 = array("X" => 2, "Y" => 1);
-	public $nmv2 = array("X" => 2, "Y" => -1);
-	public $nmv3 = array("X" => -2, "Y" => 1);
-	public $nmv4 = array("X" => -2, "Y" => -1);
-	public $nmv5 = array("X" => 1, "Y" => 2);
-	public $nmv6 = array("X" => 1, "Y" => -2);
-	public $nmv7 = array("X" => -1, "Y" => 2);
-	public $nmv8 = array("X" => -1, "Y" => -2);
-
-	public $bmv1 = array("X" => 1, "Y" => 1);
-	public $bmv2 = array("X" => 1, "Y" => -1);
-	public $bmv3 = array("X" => -1, "Y" => 1);
-	public $bmv4 = array("X" => -1, "Y" => -1);
-
-	public $rmv1 = array("X" => 1, "Y" => 0);
-	public $rmv2 = array("X" => -1, "Y" => 0);
-	public $rmv3 = array("X" => 0, "Y" => 1);
-	public $rmv4 = array("X" => 0, "Y" => -1);
-
-}
+require('Square.php');
+require('Piece.php');
+require('Pawn.php');
+require('Knight.php');
+require('Bishop.php');
+require('Rook.php');
+require('Queen.php');
+require('King.php');
 
 class Chessboard {
 	public $filesnames = array("a", "b", "c", "d", "e", "f", "g", "h");
@@ -268,79 +35,161 @@ class Chessboard {
 	}
 
 	public function createWhitePieces(){
-$p1 = new Pawn();
-$this->pieces[0] = $p1;
-$this->board[0][1]->takenBy = $this->pieces[0]->ptype;
-$p1->position = $this->board[0][1];
-$p2 = new Pawn();
-$this->pieces[1] = $p2;
-$this->board[1][1]->takenBy = $this->pieces[1]->ptype;
-$p2->position = $this->board[1][1];
-$p3 = new Pawn();
-$this->pieces[2] = $p3;
-$this->board[2][1]->takenBy = $this->pieces[2]->ptype;
-$p3->position = $this->board[2][1];
-$p4 = new Pawn();
-$this->pieces[3] = $p4;
-$this->board[3][1]->takenBy = $this->pieces[3]->ptype;
-$p4->position = $this->board[3][1];
-$p5 = new Pawn();
-$this->pieces[4] = $p5;
-$this->board[4][1]->takenBy = $this->pieces[4]->ptype;
-$p5->position = $this->board[4][1];
-$p6 = new Pawn();
-$this->pieces[5] = $p6;
-$this->board[5][1]->takenBy = $this->pieces[5]->ptype;
-$p6->position = $this->board[5][1];
-$p7 = new Pawn();
-$this->pieces[6] = $p7;
-$this->board[6][1]->takenBy = $this->pieces[6]->ptype;
-$p7->position = $this->board[6][1];
-$p8 = new Pawn();
-$this->pieces[7] = $p8;
-$this->board[7][1]->takenBy = $this->pieces[7]->ptype;
-$p8->position = $this->board[7][1];
+		//tworzenie pionów
+		$p1 = new Pawn();
+		$this->pieces[0] = $p1;
+		$this->board[0][1]->takenBy = $this->pieces[0]->ptype;
+		$p1->position = $this->board[0][1];
+		$p2 = new Pawn();
+		$this->pieces[1] = $p2;
+		$this->board[1][1]->takenBy = $this->pieces[1]->ptype;
+		$p2->position = $this->board[1][1];
+		$p3 = new Pawn();
+		$this->pieces[2] = $p3;
+		$this->board[2][1]->takenBy = $this->pieces[2]->ptype;
+		$p3->position = $this->board[2][1];
+		$p4 = new Pawn();
+		$this->pieces[3] = $p4;
+		$this->board[3][1]->takenBy = $this->pieces[3]->ptype;
+		$p4->position = $this->board[3][1];
+		$p5 = new Pawn();
+		$this->pieces[4] = $p5;
+		$this->board[4][1]->takenBy = $this->pieces[4]->ptype;
+		$p5->position = $this->board[4][1];
+		$p6 = new Pawn();
+		$this->pieces[5] = $p6;
+		$this->board[5][1]->takenBy = $this->pieces[5]->ptype;
+		$p6->position = $this->board[5][1];
+		$p7 = new Pawn();
+		$this->pieces[6] = $p7;
+		$this->board[6][1]->takenBy = $this->pieces[6]->ptype;
+		$p7->position = $this->board[6][1];
+		$p8 = new Pawn();
+		$this->pieces[7] = $p8;
+		$this->board[7][1]->takenBy = $this->pieces[7]->ptype;
+		$p8->position = $this->board[7][1];
 
-$r1 = new Rook();
-$this->pieces[8] = $r1;
-$this->board[0][0]->takenBy = $this->pieces[8]->ptype;
-$r1->position = $this->board[0][0];
-$r2 = new Rook();
-$this->pieces[9] = $r2;
-$this->board[7][0]->takenBy = $this->pieces[9]->ptype;
-$r2->position = $this->board[7][0];
+		//tworzenie wierz
+		$r1 = new Rook();
+		$this->pieces[8] = $r1;
+		$this->board[0][0]->takenBy = $this->pieces[8]->ptype;
+		$r1->position = $this->board[0][0];
+		$r2 = new Rook();
+		$this->pieces[9] = $r2;
+		$this->board[7][0]->takenBy = $this->pieces[9]->ptype;
+		$r2->position = $this->board[7][0];
 
-$n1 = new Knight();
-$this->pieces[10] = $n1;
-$this->board[1][0]->takenBy = $this->pieces[10]->ptype;
-$n1->position = $this->board[1][0];
-$n2 = new Knight();
-$this->pieces[11] = $n2;
-$this->board[6][0]->takenBy = $this->pieces[11]->ptype;
-$n2->position = $this->board[6][0];
+		//tworzenie skoczków
+		$n1 = new Knight();
+		$this->pieces[10] = $n1;
+		$this->board[1][0]->takenBy = $this->pieces[10]->ptype;
+		$n1->position = $this->board[1][0];
+		$n2 = new Knight();
+		$this->pieces[11] = $n2;
+		$this->board[6][0]->takenBy = $this->pieces[11]->ptype;
+		$n2->position = $this->board[6][0];
 
-$b1 = new Bishop();
-$this->pieces[12] = $b1;
-$this->board[2][0]->takenBy = $this->pieces[12]->ptype;
-$b1->position = $this->board[2][0];
-$b2 = new Bishop();
-$this->pieces[13] = $b2;
-$this->board[5][0]->takenBy = $this->pieces[13]->ptype;
-$b2->position = $this->board[5][0];
+		//tworzenie gońców
+		$b1 = new Bishop();
+		$this->pieces[12] = $b1;
+		$this->board[2][0]->takenBy = $this->pieces[12]->ptype;
+		$b1->position = $this->board[2][0];
+		$b2 = new Bishop();
+		$this->pieces[13] = $b2;
+		$this->board[5][0]->takenBy = $this->pieces[13]->ptype;
+		$b2->position = $this->board[5][0];
 
-$q = new Queen();
-$this->pieces[14] = $q;
-$this->board[3][0]->takenBy = $this->pieces[14]->ptype;
-$q->position = $this->board[3][0];
+		//tworzenie królowej
+		$q = new Queen();
+		$this->pieces[14] = $q;
+		$this->board[3][0]->takenBy = $this->pieces[14]->ptype;
+		$q->position = $this->board[3][0];
 
-$k = new King();
-$this->pieces[15] = $k;
-$this->board[4][0]->takenBy = $this->pieces[15]->ptype;
-$k->position = $this->board[4][0];
+		//tworzenie króla
+		$k = new King();
+		$this->pieces[15] = $k;
+		$this->board[4][0]->takenBy = $this->pieces[15]->ptype;
+		$k->position = $this->board[4][0];
 
 	}
 
+
 	public function createBlackPieces(){
+	//tworzenie pionów                                 	
+        $p1 = new Pawn();
+        $this->bpieces[0] = $p1;
+        $this->board[0][6]->takenBy = $this->bpieces[0]->ptype;
+        $p1->position = $this->board[0][6];
+        $p2 = new Pawn();
+        $this->bpieces[1] = $p2;
+        $this->board[1][6]->takenBy = $this->bpieces[1]->ptype;
+        $p2->position = $this->board[1][6];
+        $p3 = new Pawn();
+        $this->bpieces[2] = $p3;
+        $this->board[2][6]->takenBy = $this->bpieces[2]->ptype;
+        $p3->position = $this->board[2][6];
+        $p4 = new Pawn();
+        $this->bpieces[3] = $p4;
+        $this->board[3][6]->takenBy = $this->bpieces[3]->ptype;
+        $p4->position = $this->board[3][6];
+        $p5 = new Pawn();
+        $this->bpieces[4] = $p5;
+        $this->board[4][6]->takenBy = $this->bpieces[4]->ptype;
+        $p5->position = $this->board[4][6];
+        $p6 = new Pawn();
+        $this->bpieces[5] = $p6;
+        $this->board[5][6]->takenBy = $this->bpieces[5]->ptype;
+        $p6->position = $this->board[5][6];
+        $p7 = new Pawn();
+        $this->bpieces[6] = $p7;
+        $this->board[6][6]->takenBy = $this->bpieces[6]->ptype;
+        $p7->position = $this->board[6][6];
+        $p8 = new Pawn();
+        $this->bpieces[7] = $p8;
+        $this->board[7][6]->takenBy = $this->bpieces[7]->ptype;
+        $p8->position = $this->board[7][6];
+                                                                
+        //tworzenie wierz
+        $r1 = new Rook();
+        $this->bpieces[8] = $r1;
+        $this->board[0][7]->takenBy = $this->bpieces[8]->ptype;
+        $r1->position = $this->board[0][7];
+        $r2 = new Rook();
+        $this->bpieces[9] = $r2;
+        $this->board[7][7]->takenBy = $this->bpieces[9]->ptype;
+        $r2->position = $this->board[7][7];
+                                                                
+        //tworzenie skoczków
+        $n1 = new Knight();
+        $this->bpieces[10] = $n1;
+        $this->board[1][7]->takenBy = $this->bpieces[10]->ptype;
+        $n1->position = $this->board[1][7];
+        $n2 = new Knight();
+        $this->bpieces[11] = $n2;
+        $this->board[6][7]->takenBy = $this->bpieces[11]->ptype;
+        $n2->position = $this->board[6][7];
+                                                                
+        //tworzenie gońców
+        $b1 = new Bishop();
+        $this->bpieces[12] = $b1;
+        $this->board[2][7]->takenBy = $this->bpieces[12]->ptype;
+        $b1->position = $this->board[2][7];
+        $b2 = new Bishop();
+        $this->bpieces[13] = $b2;
+        $this->board[5][7]->takenBy = $this->bpieces[13]->ptype;
+        $b2->position = $this->board[5][7];
+                                                                
+        //tworzenie królowej
+        $q = new Queen();
+        $this->bpieces[14] = $q;
+        $this->board[3][7]->takenBy = $this->bpieces[14]->ptype;
+        $q->position = $this->board[3][7];
+                                                                
+        //tworzenie króla
+        $k = new King();
+        $this->bpieces[15] = $k;
+        $this->board[4][7]->takenBy = $this->bpieces[15]->ptype;
+        $k->position = $this->board[4][7];
 
 	}
 
@@ -356,21 +205,6 @@ $k->position = $this->board[4][0];
 		}
                 return $bool;                                          
         }
-
-	public function movePiece($p, $to){
-		$chosenpiece = $this->choosePiece($to);
-		if($this->isValidMove($to,$this->pieces[0])){
-		$piecetype = $this->releaseSquareOf($p);
-		$filetomove = $to[2];
-		$ranktomove = intval($to[1])-1;
-		$filenum = array_search($filetomove, $this->filesnames);	
-		$this->pieces[$p]->position->Y = $ranktomove;
-		$this->pieces[$p]->position->X = $filenum;	
-		$this->board[$filenum][$ranktomove]->takenBy = $piecetype;
-		} else {
-		echo "That move is illegal!<br>";
-		}
-	}	
 
 	public function pposF($dad){
 		$f = $this->pieces[$dad]->position->Y;
@@ -476,13 +310,6 @@ public function CheckPieceRange($piece, $to){
 		}
 	}
 
-	public function listPieces(){
-		foreach($this->pieces as $key=>$value){
-			$ra = $this->pposF($key)+1;
-			$fa = $this->filesnames[$this->pposR($key)];
-		echo "The pawn is located on ".$fa." file at the ".$ra." rank.";
-		}
-	}
 }
 
 $CB = new Chessboard();
